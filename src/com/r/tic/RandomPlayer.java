@@ -1,3 +1,6 @@
+/**
+ * @author rahul
+ **/
 package com.r.tic;
 
 public class RandomPlayer extends Player {
@@ -6,9 +9,10 @@ public class RandomPlayer extends Player {
 		setRandomizeMoves(false);
 	}
 
+	@Override
 	public synchronized int chooseNextMove(char[][] grid, char whichPlayer) {
 		setGridAndFindFreeCells(grid);
 		int freeIdx = rand.nextInt(freeCount);
-		return (freeRow[freeIdx]*3)+freeCol[freeIdx];
+		return (freeRow[freeIdx] * 3) + freeCol[freeIdx];
 	}
 }

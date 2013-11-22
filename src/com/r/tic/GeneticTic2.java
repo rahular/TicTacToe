@@ -1,5 +1,7 @@
+/**
+ * @author rahul
+ **/
 package com.r.tic;
-
 
 public class GeneticTic2 {
 	public static void main(String[] args) {
@@ -9,14 +11,16 @@ public class GeneticTic2 {
 		System.out.println("Learning...");
 		for (int freeCount = 1; freeCount <= 9; freeCount++) {
 			geneticPlayer.train(freeCount);
-			System.out.println("Trained free count "+freeCount);
+			System.out.println("Trained free count " + freeCount);
 		}
 
 		// Do competition.
 		int numTestPasses = 100000;
 		for (int whichOpponent = 1; whichOpponent <= 2; whichOpponent++) {
-			Player opponent = (whichOpponent == 1) ? new IdealPlayer() : new RandomPlayer();
-			System.out.println("Competing against "+opponent.getClass().getName()+"...");
+			Player opponent = (whichOpponent == 1) ? new IdealPlayer()
+					: new RandomPlayer();
+			System.out.println("Competing against "
+					+ opponent.getClass().getName() + "...");
 			Tic tic = new Tic(geneticPlayer, opponent);
 			int xWinCount = 0, oWinCount = 0, nWinCount = 0;
 			for (int pass = 0; pass < numTestPasses; pass++) {
@@ -34,9 +38,9 @@ public class GeneticTic2 {
 				}
 			}
 			// Output test result counts.
-			System.out.println("X won: "+xWinCount);
-			System.out.println("O won: "+oWinCount);
-			System.out.println("Nobody won: "+nWinCount);
+			System.out.println("X won: " + xWinCount);
+			System.out.println("O won: " + oWinCount);
+			System.out.println("Nobody won: " + nWinCount);
 		}
 	}
 }

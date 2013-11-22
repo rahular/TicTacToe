@@ -1,3 +1,6 @@
+/**
+ * @author rahul
+ **/
 package com.r.tic;
 
 // Player which can play multiple games, beginning with the first available position
@@ -7,34 +10,36 @@ public class SequencePlayer extends Player {
 	private int startingFreeCount = 0;
 	private int[] nextMoveIdx = new int[10];
 	private boolean sequenceDone = false;
-///
-public boolean debug = false;
-private boolean debug_beginseq = true;
+	// /
+	public boolean debug = false;
+	private boolean debug_beginseq = true;
 
 	public SequencePlayer() {
 		// For consistent results, we must NOT shuffle the free positions.
 		setRandomizeMoves(false);
 	}
 
+	@Override
 	public synchronized int chooseNextMove(char[][] grid, char whichPlayer) {
 		if (sequenceDone) {
-			throw new InternalError("SequencePlayer.chooseNextMove(): sequenceDone is set");
+			throw new InternalError(
+					"SequencePlayer.chooseNextMove(): sequenceDone is set");
 		}
-///System.out.println("SequencePlayer chooseNextMove()");
-///
-///for (int i = 0; i < 10; i++) System.out.print(" "+nextMoveIdx[i]);
-///System.out.println();
+		// /System.out.println("SequencePlayer chooseNextMove()");
+		// /
+		// /for (int i = 0; i < 10; i++) System.out.print(" "+nextMoveIdx[i]);
+		// /System.out.println();
 		setGridAndFindFreeCells(grid);
 		int freeIdx = nextMoveIdx[freeCount];
-///
-if (debug) {
-	if (debug_beginseq) {
-		debug_beginseq = false;
-		System.out.print(this);
-	}
-	System.out.print(" "+freeIdx);
-}
-		return (freeRow[freeIdx]*3)+freeCol[freeIdx];
+		// /
+		if (debug) {
+			if (debug_beginseq) {
+				debug_beginseq = false;
+				System.out.print(this);
+			}
+			System.out.print(" " + freeIdx);
+		}
+		return (freeRow[freeIdx] * 3) + freeCol[freeIdx];
 	}
 
 	// Reset to playing the first possible move.
@@ -48,11 +53,13 @@ if (debug) {
 			startingFreeCount = 9;
 		}
 		this.startingFreeCount = startingFreeCount;
-///System.out.println("SequencePlayer reset("+startingFreeCount+")");
-		for (int i = 0; i < 10; i++) nextMoveIdx[i] = 0;
+		// /System.out.println("SequencePlayer reset("+startingFreeCount+")");
+		for (int i = 0; i < 10; i++)
+			nextMoveIdx[i] = 0;
 		sequenceDone = (startingFreeCount == 0);
-///
-if (!sequenceDone) debug_beginseq = true;
+		// /
+		if (!sequenceDone)
+			debug_beginseq = true;
 	}
 
 	// This must be called after each game, to cause this player to
@@ -60,19 +67,23 @@ if (!sequenceDone) debug_beginseq = true;
 	public synchronized void gameDone() {
 		if (!sequenceDone) {
 			int fc;
-			for (fc = startingFreeCount; fc > 0; fc -= 2) { ; }
+			for (fc = startingFreeCount; fc > 0; fc -= 2) {
+				;
+			}
 			fc += 2;
 			for (; fc <= startingFreeCount; fc += 2) {
 				nextMoveIdx[fc]++;
-				if (nextMoveIdx[fc] < fc) break;
+				if (nextMoveIdx[fc] < fc)
+					break;
 				nextMoveIdx[fc] = 0;
 				if (fc >= startingFreeCount) {
 					sequenceDone = true;
 				}
 			}
-///
-if (debug) System.out.println();
-debug_beginseq = true;
+			// /
+			if (debug)
+				System.out.println();
+			debug_beginseq = true;
 		}
 	}
 

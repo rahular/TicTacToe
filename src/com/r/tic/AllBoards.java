@@ -1,24 +1,31 @@
+/**
+ * @author rahul
+ **/
 package com.r.tic;
 
 import java.io.*;
 import java.util.*;
 
 public class AllBoards {
+	@SuppressWarnings("unchecked")
 	public static char[][][] getAllBoards() {
 		List v = new Vector();
 		BufferedReader in = null;
 		try {
-			String resourceName =
-				AllBoards.class.getPackage().getName().replace('.', File.separatorChar)+
-				"/allboards.txt";
-			in = new BufferedReader(new InputStreamReader
-				(AllBoards.class.getClassLoader().getResourceAsStream(resourceName)));
+			String resourceName = AllBoards.class.getPackage().getName()
+					.replace('.', File.separatorChar)
+					+ "/allboards.txt";
+			in = new BufferedReader(new InputStreamReader(AllBoards.class
+					.getClassLoader().getResourceAsStream(resourceName)));
 			String line;
 			while (true) {
-				if ((line = in.readLine()) == null) break;
-				if (line.length() == 0) continue;
+				if ((line = in.readLine()) == null)
+					break;
+				if (line.length() == 0)
+					continue;
 				if (line.length() != 9) {
-					throw new Exception("Unexpected line length: "+line.length()+" (should be 9)");
+					throw new Exception("Unexpected line length: "
+							+ line.length() + " (should be 9)");
 				}
 
 				char[][] grid = new char[3][3];
@@ -34,12 +41,15 @@ public class AllBoards {
 
 				v.add(grid);
 			}
-			return (char[][][])v.toArray(new char[v.size()][][]);
+			return (char[][][]) v.toArray(new char[v.size()][][]);
 		} catch (Exception ex) {
 			throw new Error(ex);
 		} finally {
 			if (in != null) {
-				try { in.close(); } catch (Exception ex) {}
+				try {
+					in.close();
+				} catch (Exception ex) {
+				}
 			}
 		}
 	}
@@ -67,7 +77,7 @@ public class AllBoards {
 	public static void rotate90CCWRowColInts(int[] rows, int[] cols, int count) {
 		int r, c;
 		for (int i = 0; i < count; i++) {
-			r = 2-cols[i];
+			r = 2 - cols[i];
 			c = rows[i];
 			rows[i] = r;
 			cols[i] = c;
@@ -76,15 +86,24 @@ public class AllBoards {
 
 	public static int unrotate90CCWMove(int move) {
 		switch (move) {
-		case 0: return 2;
-		case 2: return 8;
-		case 8: return 6;
-		case 6: return 0;
-		case 1: return 5;
-		case 5: return 7;
-		case 7: return 3;
-		case 3: return 1;
-		default: return move;
+		case 0:
+			return 2;
+		case 2:
+			return 8;
+		case 8:
+			return 6;
+		case 6:
+			return 0;
+		case 1:
+			return 5;
+		case 5:
+			return 7;
+		case 7:
+			return 3;
+		case 3:
+			return 1;
+		default:
+			return move;
 		}
 	}
 
@@ -114,13 +133,20 @@ public class AllBoards {
 
 	public static int unflipHMove(int move) {
 		switch (move) {
-		case 0: return 2;
-		case 2: return 0;
-		case 3: return 5;
-		case 5: return 3;
-		case 6: return 8;
-		case 8: return 6;
-		default: return move;
+		case 0:
+			return 2;
+		case 2:
+			return 0;
+		case 3:
+			return 5;
+		case 5:
+			return 3;
+		case 6:
+			return 8;
+		case 8:
+			return 6;
+		default:
+			return move;
 		}
 	}
 
@@ -135,6 +161,6 @@ public class AllBoards {
 			}
 			System.out.println();
 		}
-		System.out.println("Total boards: "+allBoards.length);
+		System.out.println("Total boards: " + allBoards.length);
 	}
 }

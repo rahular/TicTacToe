@@ -1,3 +1,6 @@
+/**
+ * @author rahul
+ **/
 package com.r.tic;
 
 import java.util.*;
@@ -16,14 +19,15 @@ public class FindAllBoards {
 
 		public boolean equals(Board other) {
 			for (int i = 0; i < 9; i++) {
-				if (grid[i] != other.grid[i]) return false;
+				if (grid[i] != other.grid[i])
+					return false;
 			}
 			return true;
 		}
 
 		// 012 -> 258
-		// 345    147
-		// 678    036
+		// 345 147
+		// 678 036
 		private void rotate90CCW() {
 			char[] rotFlipBuf = new char[9];
 			System.arraycopy(grid, 0, rotFlipBuf, 0, 9);
@@ -38,8 +42,8 @@ public class FindAllBoards {
 		}
 
 		// 012 -> 210
-		// 345    543
-		// 678    876
+		// 345 543
+		// 678 876
 		private void flipH() {
 			char[] rotFlipBuf = new char[9];
 			System.arraycopy(grid, 0, rotFlipBuf, 0, 9);
@@ -59,19 +63,21 @@ public class FindAllBoards {
 					sb.append("-+-+-");
 					sb.append(nl);
 				}
-				sb.append(grid[(r*3)]);
+				sb.append(grid[(r * 3)]);
 				sb.append('|');
-				sb.append(grid[(r*3)+1]);
+				sb.append(grid[(r * 3) + 1]);
 				sb.append('|');
-				sb.append(grid[(r*3)+2]);
+				sb.append(grid[(r * 3) + 2]);
 				sb.append(nl);
 			}
 			return sb.toString();
 		}
 
+		@Override
 		public String toString() {
 			StringBuffer sb = new StringBuffer();
-			for (int i = 0; i < 9; i++) sb.append(grid[i]);
+			for (int i = 0; i < 9; i++)
+				sb.append(grid[i]);
 			return sb.toString();
 		}
 	}
@@ -100,23 +106,24 @@ public class FindAllBoards {
 			}
 			for (int i = 0; i < 9; i++) {
 				cellVal[i]++;
-				if (cellVal[i] < 3) break;
+				if (cellVal[i] < 3)
+					break;
 				cellVal[i] = 0;
-				if (i == 8) done = true;
+				if (i == 8)
+					done = true;
 			}
 
 			// Don't save any winning boards.
 			boolean isWin = false;
 			for (int rc = 0; rc < 3; rc++) {
-				if (   (grid[(rc*3)] != ' ')
-					&& (grid[(rc*3)] == grid[(rc*3)+1])
-					&& (grid[(rc*3)] == grid[(rc*3)+2])   ) {
+				if ((grid[(rc * 3)] != ' ')
+						&& (grid[(rc * 3)] == grid[(rc * 3) + 1])
+						&& (grid[(rc * 3)] == grid[(rc * 3) + 2])) {
 					isWin = true;
 					break;
 				}
-				if (   (grid[rc] != ' ')
-					&& (grid[rc] == grid[3+rc])
-					&& (grid[rc] == grid[6+rc])   ) {
+				if ((grid[rc] != ' ') && (grid[rc] == grid[3 + rc])
+						&& (grid[rc] == grid[6 + rc])) {
 					isWin = true;
 					break;
 				}
@@ -124,14 +131,12 @@ public class FindAllBoards {
 			if (isWin) {
 				continue;
 			}
-			if (   (grid[0] != ' ')
-				&& (grid[0] == grid[4])
-				&& (grid[0] == grid[8])   ) {
+			if ((grid[0] != ' ') && (grid[0] == grid[4])
+					&& (grid[0] == grid[8])) {
 				isWin = true;
 			} else {
-				if (   (grid[2] != ' ')
-					&& (grid[2] == grid[4])
-					&& (grid[2] == grid[6])   ) {
+				if ((grid[2] != ' ') && (grid[2] == grid[4])
+						&& (grid[2] == grid[6])) {
 					isWin = true;
 				}
 			}
@@ -139,7 +144,8 @@ public class FindAllBoards {
 				continue;
 			}
 
-			// Don't save any full boards, or any boards where one player is more than
+			// Don't save any full boards, or any boards where one player is
+			// more than
 			// one move ahead of the other player.
 			boolean isFull = true;
 			int xMoves = 0, oMoves = 0;
@@ -156,7 +162,7 @@ public class FindAllBoards {
 					break;
 				}
 			}
-			if ( (isFull) || (Math.abs(xMoves-oMoves) > 1) ) {
+			if ((isFull) || (Math.abs(xMoves - oMoves) > 1)) {
 				continue;
 			}
 
@@ -168,7 +174,7 @@ public class FindAllBoards {
 			for (int flipPass = 1; ((flipPass <= 2) && (!isDup)); flipPass++) {
 				for (int rotPass = 1; ((rotPass <= 4) && (!isDup)); rotPass++) {
 					for (int i = 0, n = allBoards.size(); i < n; i++) {
-						if (testBoard.equals((Board)allBoards.get(i))) {
+						if (testBoard.equals((Board) allBoards.get(i))) {
 							isDup = true;
 							break;
 						}
@@ -182,114 +188,51 @@ public class FindAllBoards {
 			}
 
 			allBoards.add(board);
-/*
-System.err.print(allBoards.size());
-System.err.print(": ");
-System.err.print(startPlayer);
-for (int i = 0; i < playCount; i++) {
-	System.err.print(",");
-	System.err.print(playPos[i]);
-}
-System.err.println();
-*/
+			/*
+			 * System.err.print(allBoards.size()); System.err.print(": ");
+			 * System.err.print(startPlayer); for (int i = 0; i < playCount;
+			 * i++) { System.err.print(","); System.err.print(playPos[i]); }
+			 * System.err.println();
+			 */
 		}
 
-
-/*
-		for (int playCount = 1; playCount < 9; playCount++) {
-			for (boolean done = false; !done;) {
-				boolean anyDupPlays = false;
-				for (int i = 1; ( (i < playCount) && (!anyDupPlays) ); i++) {
-					for (int j = 0; j < i; j++) {
-						if (playPos[i] == playPos[j]) {
-							anyDupPlays = true;
-							break;
-						}
-					}
-				}
-				if (!anyDupPlays) {
-					for (int startPass = 1; startPass <= 2; startPass++) {
-						char startPlayer = (startPass == 1) ? 'X' : 'O';
-						for (int i = 0; i < 9; i++) grid[i] = ' ';
-						char player = startPlayer;
-						for (int plays = 0;
-							 plays < playCount;
-							 plays++, player = (player == 'X') ? 'O' : 'X') {
-							grid[playPos[plays]] = player;
-							// Don't save any winning boards.
-							boolean isWin = false;
-							for (int rc = 0; rc < 3; rc++) {
-								if (   (grid[(rc*3)+0] != ' ')
-									&& (grid[(rc*3)+0] == grid[(rc*3)+1])
-									&& (grid[(rc*3)+0] == grid[(rc*3)+2])   ) {
-									isWin = true;
-									break;
-								}
-								if (   (grid[(0*3)+rc] != ' ')
-									&& (grid[(0*3)+rc] == grid[(1*3)+rc])
-									&& (grid[(0*3)+rc] == grid[(2*3)+rc])   ) {
-									isWin = true;
-									break;
-								}
-							}
-							if (!isWin) {
-								if (   (grid[(0*3)+0] != ' ')
-									&& (grid[(0*3)+0] == grid[(1*3)+1])
-									&& (grid[(0*3)+0] == grid[(2*3)+2])   ) {
-									isWin = true;
-								} else {
-									if (   (grid[(0*3)+2] != ' ')
-										&& (grid[(0*3)+2] == grid[(1*3)+1])
-										&& (grid[(0*3)+2] == grid[(2*3)+0])   ) {
-										isWin = true;
-									}
-								}
-							}
-							if (!isWin) {
-								// Don't save any boards which are duplicates of other boards,
-								// including rotated and/or flipped duplicates.
-								Board board = new Board(grid);
-								boolean isDup = false;
-								for (int flipPass = 1; ((flipPass <= 2) && (!isDup)); flipPass++) {
-									for (int rotPass = 4; ((rotPass <= 4) && (!isDup)); rotPass++) {
-										for (int i = 0, n = allBoards.size(); i < n; i++) {
-											if (board.equals((Board)allBoards.get(i))) {
-												isDup = true;
-												break;
-											}
-										}
-										board.rotate90CCW();
-									}
-									board.flipH();
-								}
-								if (!isDup) {
-									allBoards.add(board);
-System.err.print(allBoards.size());
-System.err.print(": ");
-System.err.print(startPlayer);
-for (int i = 0; i < playCount; i++) {
-	System.err.print(",");
-	System.err.print(playPos[i]);
-}
-System.err.println();
-								}
-							}
-						}
-					}
-				}	// if (!anyDupPlays)
-				for (int i = playCount-1; ; i--) {
-					if (i < 0) {
-						done = true;
-						break;
-					}
-					playPos[i]++;
-					if (playPos[i] < 9) break;
-					playPos[i] = 0;
-				}
-			}	// for (boolean done = false; !done;)
-		}	// for (int playCount = 1; playCount < 9; playCount++)
-*/
-		return (Board[])allBoards.toArray(new Board[allBoards.size()]);
+		/*
+		 * for (int playCount = 1; playCount < 9; playCount++) { for (boolean
+		 * done = false; !done;) { boolean anyDupPlays = false; for (int i = 1;
+		 * ( (i < playCount) && (!anyDupPlays) ); i++) { for (int j = 0; j < i;
+		 * j++) { if (playPos[i] == playPos[j]) { anyDupPlays = true; break; } }
+		 * } if (!anyDupPlays) { for (int startPass = 1; startPass <= 2;
+		 * startPass++) { char startPlayer = (startPass == 1) ? 'X' : 'O'; for
+		 * (int i = 0; i < 9; i++) grid[i] = ' '; char player = startPlayer; for
+		 * (int plays = 0; plays < playCount; plays++, player = (player == 'X')
+		 * ? 'O' : 'X') { grid[playPos[plays]] = player; // Don't save any
+		 * winning boards. boolean isWin = false; for (int rc = 0; rc < 3; rc++)
+		 * { if ( (grid[(rc*3)+0] != ' ') && (grid[(rc*3)+0] == grid[(rc*3)+1])
+		 * && (grid[(rc*3)+0] == grid[(rc*3)+2]) ) { isWin = true; break; } if (
+		 * (grid[(0*3)+rc] != ' ') && (grid[(0*3)+rc] == grid[(1*3)+rc]) &&
+		 * (grid[(0*3)+rc] == grid[(2*3)+rc]) ) { isWin = true; break; } } if
+		 * (!isWin) { if ( (grid[(0*3)+0] != ' ') && (grid[(0*3)+0] ==
+		 * grid[(1*3)+1]) && (grid[(0*3)+0] == grid[(2*3)+2]) ) { isWin = true;
+		 * } else { if ( (grid[(0*3)+2] != ' ') && (grid[(0*3)+2] ==
+		 * grid[(1*3)+1]) && (grid[(0*3)+2] == grid[(2*3)+0]) ) { isWin = true;
+		 * } } } if (!isWin) { // Don't save any boards which are duplicates of
+		 * other boards, // including rotated and/or flipped duplicates. Board
+		 * board = new Board(grid); boolean isDup = false; for (int flipPass =
+		 * 1; ((flipPass <= 2) && (!isDup)); flipPass++) { for (int rotPass = 4;
+		 * ((rotPass <= 4) && (!isDup)); rotPass++) { for (int i = 0, n =
+		 * allBoards.size(); i < n; i++) { if
+		 * (board.equals((Board)allBoards.get(i))) { isDup = true; break; } }
+		 * board.rotate90CCW(); } board.flipH(); } if (!isDup) {
+		 * allBoards.add(board); System.err.print(allBoards.size());
+		 * System.err.print(": "); System.err.print(startPlayer); for (int i =
+		 * 0; i < playCount; i++) { System.err.print(",");
+		 * System.err.print(playPos[i]); } System.err.println(); } } } } } // if
+		 * (!anyDupPlays) for (int i = playCount-1; ; i--) { if (i < 0) { done =
+		 * true; break; } playPos[i]++; if (playPos[i] < 9) break; playPos[i] =
+		 * 0; } } // for (boolean done = false; !done;) } // for (int playCount
+		 * = 1; playCount < 9; playCount++)
+		 */
+		return (Board[]) allBoards.toArray(new Board[allBoards.size()]);
 	}
 
 	public static void main(String[] args) {
@@ -297,7 +240,7 @@ System.err.println();
 		for (int i = 0; i < boards.length; i++) {
 			System.out.println(boards[i]);
 		}
-///
-System.err.println("Total unique boards: "+boards.length);
+		// /
+		System.err.println("Total unique boards: " + boards.length);
 	}
 }

@@ -1,5 +1,7 @@
+/**
+ * @author rahul
+ **/
 package com.r.tic;
-
 
 public class NeuralTic {
 	public static void main(String[] args) {
@@ -7,19 +9,23 @@ public class NeuralTic {
 
 		// Do training.
 		System.out.println("Learning...");
-		for (int pass = 1; ; pass++) {
+		for (int pass = 1;; pass++) {
 			neuralPlayer.trainAllBoardsOnePass();
 			int npass = neuralPlayer.getNumPassedMoves();
 			int nfail = neuralPlayer.getNumFailedMoves();
-			System.out.println("train pass="+pass+" npass="+npass+" nfail="+nfail);
-			if (nfail == 0) break;
+			System.out.println("train pass=" + pass + " npass=" + npass
+					+ " nfail=" + nfail);
+			if (nfail == 0)
+				break;
 		}
 
 		// Do competition.
 		int numTestPasses = 100000;
 		for (int whichOpponent = 1; whichOpponent <= 2; whichOpponent++) {
-			Player opponent = (whichOpponent == 1) ? new IdealPlayer() : new RandomPlayer();
-			System.out.println("Competing against "+opponent.getClass().getName()+"...");
+			Player opponent = (whichOpponent == 1) ? new IdealPlayer()
+					: new RandomPlayer();
+			System.out.println("Competing against "
+					+ opponent.getClass().getName() + "...");
 			Tic tic = new Tic(neuralPlayer, opponent);
 			int xWinCount = 0, oWinCount = 0, nWinCount = 0;
 			for (int pass = 0; pass < numTestPasses; pass++) {
@@ -37,16 +43,15 @@ public class NeuralTic {
 				}
 			}
 			// Output test result counts.
-			System.out.println("X won: "+xWinCount);
-			System.out.println("O won: "+oWinCount);
-			System.out.println("Nobody won: "+nWinCount);
+			System.out.println("X won: " + xWinCount);
+			System.out.println("O won: " + oWinCount);
+			System.out.println("Nobody won: " + nWinCount);
 		}
 
-/*		System.out.println();
-		System.out.println();
-		System.out.println();
-		System.out.println();
-		System.out.println("Encoded network:");
-		System.out.println(neuralPlayer.encodeNN());*/
+		/*
+		 * System.out.println(); System.out.println(); System.out.println();
+		 * System.out.println(); System.out.println("Encoded network:");
+		 * System.out.println(neuralPlayer.encodeNN());
+		 */
 	}
 }

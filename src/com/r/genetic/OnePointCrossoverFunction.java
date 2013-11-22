@@ -1,3 +1,6 @@
+/**
+ * @author rahul
+ **/
 package com.r.genetic;
 
 import java.util.Random;
@@ -10,6 +13,7 @@ public class OnePointCrossoverFunction implements CrossoverFunction {
 		this.mutationRate = mutationRate;
 	}
 
+	@Override
 	public void crossover(boolean[] parent1, boolean[] parent2, boolean[] child) {
 		int i, crossoverPoint = rand.nextInt(child.length);
 		for (i = 0; i < crossoverPoint; i++) {

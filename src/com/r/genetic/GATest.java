@@ -1,25 +1,24 @@
+/**
+ * @author rahul
+ **/
 package com.r.genetic;
 
 public class GATest {
 	public static void main(String[] args) {
-		GeneticAlgorithm ga = new GeneticAlgorithm(
-			16,
-			new FitnessFunction() {
-				public double calculateFitness(boolean[] individual) {
-					int fitness = 0;
-					if (individual[0]) {
-						fitness++;
-						for (int i = 1; i < individual.length; i++) {
-							if (individual[i] != individual[i-1]) fitness++;
-						}
+		GeneticAlgorithm ga = new GeneticAlgorithm(16, new FitnessFunction() {
+			@Override
+			public double calculateFitness(boolean[] individual) {
+				int fitness = 0;
+				if (individual[0]) {
+					fitness++;
+					for (int i = 1; i < individual.length; i++) {
+						if (individual[i] != individual[i - 1])
+							fitness++;
 					}
-					return (double)fitness;
 				}
-			},
-			new OnePointCrossoverFunction(0.3),
-			1000,
-			10
-		);
+				return fitness;
+			}
+		}, new OnePointCrossoverFunction(0.3), 1000, 10);
 
 		int generation = 0;
 		printResult(ga, 0);
@@ -29,13 +28,14 @@ public class GATest {
 			generation++;
 
 			printResult(ga, generation);
-			if (ga.getIndividualFitness(0) == 16.0) break;
+			if (ga.getIndividualFitness(0) == 16.0)
+				break;
 		}
 	}
 
 	public static void printResult(GeneticAlgorithm ga, int generation) {
 		boolean[] bits = ga.getIndividualSolution(0);
-		System.out.print(""+generation+": ");
+		System.out.print("" + generation + ": ");
 		for (int i = 0; i < bits.length; i++) {
 			System.out.print(bits[i] ? "1" : "0");
 		}

@@ -1,3 +1,6 @@
+/**
+ * @author rahul
+ **/
 package com.r.tic;
 
 import java.io.PrintStream;
@@ -5,20 +8,29 @@ import java.util.Random;
 
 public abstract class Player {
 	protected char[][] grid;
-	protected int movesSoFar, freeCount, freeRow[] = new int[9], freeCol[] = new int[9];
-	private int[] tmpRand9 = new int[9], tmpFR = new int[9], tmpFC = new int[9];
+	protected int movesSoFar, freeCount, freeRow[] = new int[9],
+			freeCol[] = new int[9];
+	private int[] tmpRand9 = new int[9], tmpFR = new int[9],
+			tmpFC = new int[9];
 	protected Random rand = new Random();
 	protected boolean randomizeMoves = false;
 
-	public boolean getRandomizeMoves() { return randomizeMoves; }
-	public void setRandomizeMoves(boolean randomizeMoves) { this.randomizeMoves = randomizeMoves; }
+	public boolean getRandomizeMoves() {
+		return randomizeMoves;
+	}
+
+	public void setRandomizeMoves(boolean randomizeMoves) {
+		this.randomizeMoves = randomizeMoves;
+	}
 
 	// Choose the next move.
 	// This returns (row*3)+column for the cell in which to place our next play.
 	public abstract int chooseNextMove(char[][] grid, char whichPlayer);
 
-	// Find free cells. This populates movesSoFar, freeCount, freeRow and freeCol.
-	// This should be called within the implementing class' chooseNextMove() function, before
+	// Find free cells. This populates movesSoFar, freeCount, freeRow and
+	// freeCol.
+	// This should be called within the implementing class' chooseNextMove()
+	// function, before
 	// doing anything.
 	protected void setGridAndFindFreeCells(char[][] grid) {
 		this.grid = grid;
@@ -52,23 +64,28 @@ public abstract class Player {
 		}
 	}
 
-	// Return the number of free cells at the beginning of the most recent call to chooseNextMove().
+	// Return the number of free cells at the beginning of the most recent call
+	// to chooseNextMove().
 	// This requires that each subclass' chooseNextMove() function calls
 	// setGridAndFindFreeCells(grid) before doing anything else.
-	public int getFreeCount() { return freeCount; }
+	public int getFreeCount() {
+		return freeCount;
+	}
 
-	// Given a row and column, return the index into freeRow and freeCol which match it.
+	// Given a row and column, return the index into freeRow and freeCol which
+	// match it.
 	// If not found, return -1.
 	protected int findFreeCellIdx(int row, int col) {
 		for (int i = 0; i < freeCount; i++) {
-			if ( (freeRow[i] == row) && (freeCol[i] == col) ) return i;
+			if ((freeRow[i] == row) && (freeCol[i] == col))
+				return i;
 		}
 		return -1;
 	}
 
 	// Convert a free cell index to (row*3)+column for the corresponding cell.
 	protected int freeCellIdxToRow3Col(int freeCellIdx) {
-		return (freeRow[freeCellIdx]*3)+freeCol[freeCellIdx];
+		return (freeRow[freeCellIdx] * 3) + freeCol[freeCellIdx];
 	}
 
 	public static void showGrid(char[][] grid, PrintStream out) {
@@ -81,15 +98,18 @@ public abstract class Player {
 			System.out.print('|');
 			System.out.print(grid[r][2]);
 			System.out.println('|');
-			if (r < 2) System.out.println("|-----|");
+			if (r < 2)
+				System.out.println("|-----|");
 		}
 		System.out.println("-------");
 	}
 
-	// Initialize sequential indexes into the indexes[] array, then shuffle them into random order.
+	// Initialize sequential indexes into the indexes[] array, then shuffle them
+	// into random order.
 	private void initRandomIndexes(int[] indexes, int numIndexes) {
-		for (int i = 0; i < numIndexes; i++) indexes[i] = i;
-		if ( (randomizeMoves) && (numIndexes > 1) ) {
+		for (int i = 0; i < numIndexes; i++)
+			indexes[i] = i;
+		if ((randomizeMoves) && (numIndexes > 1)) {
 			int r1, r2, tmp;
 			for (int i = 0; i < numIndexes; i++) {
 				r1 = rand.nextInt(numIndexes);

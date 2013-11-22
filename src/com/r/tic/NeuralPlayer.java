@@ -1,3 +1,6 @@
+/**
+ * @author rahul
+ **/
 package com.r.tic;
 
 import com.r.neural.*;
@@ -20,13 +23,14 @@ public class NeuralPlayer extends Player {
 		netOuts = nn.getOutputs();
 	}
 
-/// TODO: Write the constructor in BackPropagationNeuralNetwork.java which takes an encoded
-/// NN as a string, then uncomment this.
-///	public NeuralPlayer(String encodedNN) {
-///		nn = new BackPropagationNeuralNetwork(encodedNN);
-///		netIns = nn.getInputs();
-///		netOuts = nn.getOutputs();
-///	}
+	// / TODO: Write the constructor in BackPropagationNeuralNetwork.java which
+	// takes an encoded
+	// / NN as a string, then uncomment this.
+	// / public NeuralPlayer(String encodedNN) {
+	// / nn = new BackPropagationNeuralNetwork(encodedNN);
+	// / netIns = nn.getInputs();
+	// / netOuts = nn.getOutputs();
+	// / }
 
 	public String encodeNN() {
 		return nn.encode();
@@ -35,12 +39,14 @@ public class NeuralPlayer extends Player {
 	private char[][] tmpGrid = new char[3][3];
 	private int[] tmpFreeRow = new int[9], tmpFreeCol = new int[9];
 
+	@Override
 	public synchronized int chooseNextMove(char[][] grid, char whichPlayer) {
 		lazyLoadAllBoards();
 
 		setGridAndFindFreeCells(grid);
 
-		for (int r = 0; r < 3; r++) System.arraycopy(grid[r], 0, tmpGrid[r], 0, 3);
+		for (int r = 0; r < 3; r++)
+			System.arraycopy(grid[r], 0, tmpGrid[r], 0, 3);
 		System.arraycopy(freeRow, 0, tmpFreeRow, 0, freeCount);
 		System.arraycopy(freeCol, 0, tmpFreeCol, 0, freeCount);
 
@@ -52,15 +58,15 @@ public class NeuralPlayer extends Player {
 				char[][] ab;
 				for (int i = 0; i < allBoards.length; i++) {
 					ab = allBoards[i];
-					if ((tmpGrid[0][0] == ab[0][0]) &&
-						(tmpGrid[0][1] == ab[0][1]) &&
-						(tmpGrid[0][2] == ab[0][2]) &&
-						(tmpGrid[1][0] == ab[1][0]) &&
-						(tmpGrid[1][1] == ab[1][1]) &&
-						(tmpGrid[1][2] == ab[1][2]) &&
-						(tmpGrid[2][0] == ab[2][0]) &&
-						(tmpGrid[2][1] == ab[2][1]) &&
-						(tmpGrid[2][2] == ab[2][2])) {
+					if ((tmpGrid[0][0] == ab[0][0])
+							&& (tmpGrid[0][1] == ab[0][1])
+							&& (tmpGrid[0][2] == ab[0][2])
+							&& (tmpGrid[1][0] == ab[1][0])
+							&& (tmpGrid[1][1] == ab[1][1])
+							&& (tmpGrid[1][2] == ab[1][2])
+							&& (tmpGrid[2][0] == ab[2][0])
+							&& (tmpGrid[2][1] == ab[2][1])
+							&& (tmpGrid[2][2] == ab[2][2])) {
 						found = true;
 						break;
 					}
@@ -71,7 +77,7 @@ public class NeuralPlayer extends Player {
 						for (int c = 0; c < 3; c++, idx++) {
 							char ch = tmpGrid[r][c];
 							netIns[idx] = (ch == whichPlayer) ? 1.0 : 0.0;
-							netIns[idx+9] = (ch == opponent) ? 1.0 : 0.0;
+							netIns[idx + 9] = (ch == opponent) ? 1.0 : 0.0;
 						}
 					}
 
@@ -81,7 +87,8 @@ public class NeuralPlayer extends Player {
 					double maxOut = 0.0;
 					int nextMove = -1;
 					for (int freeIdx = 0; freeIdx < freeCount; freeIdx++) {
-						int pos = (tmpFreeRow[freeIdx]*3)+tmpFreeCol[freeIdx];
+						int pos = (tmpFreeRow[freeIdx] * 3)
+								+ tmpFreeCol[freeIdx];
 						double out = netOuts[pos];
 						if (out > maxOut) {
 							maxOut = out;
@@ -89,7 +96,8 @@ public class NeuralPlayer extends Player {
 						}
 					}
 					if (nextMove >= 0) {
-						// Adjust nextMove back into the original grid orientation.
+						// Adjust nextMove back into the original grid
+						// orientation.
 						if (flipPass > 0) {
 							nextMove = AllBoards.unflipHMove(nextMove);
 						}
@@ -97,20 +105,20 @@ public class NeuralPlayer extends Player {
 							nextMove = AllBoards.unrotate90CCWMove(nextMove);
 						}
 					} else {
-						// No valid move.  Choose a random move.
+						// No valid move. Choose a random move.
 						int freeIdx = rand.nextInt(freeCount);
-						nextMove = (freeRow[freeIdx]*3)+freeCol[freeIdx];
+						nextMove = (freeRow[freeIdx] * 3) + freeCol[freeIdx];
 					}
 					return nextMove;
-				}	// if (found)
+				} // if (found)
 
 				AllBoards.flipHGrid(tmpGrid);
 				AllBoards.flipHColInts(tmpFreeCol, freeCount);
-			}	// for (int flipPass = 0; flipPass < 2; flipPass++)
+			} // for (int flipPass = 0; flipPass < 2; flipPass++)
 
 			AllBoards.rotate90CCWGrid(tmpGrid);
 			AllBoards.rotate90CCWRowColInts(tmpFreeRow, tmpFreeCol, freeCount);
-		}	// for (int rotPass = 0; rotPass < 4; rotPass++)
+		} // for (int rotPass = 0; rotPass < 4; rotPass++)
 
 		throw new InternalError("Unexpected grid");
 	}
@@ -125,8 +133,10 @@ public class NeuralPlayer extends Player {
 		for (int i = 0; i < allBoards.length; i++) {
 			char[][] grid = allBoards[i];
 			int xMove = allBoardsXNextMove[i], oMove = allBoardsONextMove[i];
-			if (xMove >= 0) trainOneMove('X', grid, xMove);
-			if (oMove >= 0) trainOneMove('O', grid, oMove);
+			if (xMove >= 0)
+				trainOneMove('X', grid, xMove);
+			if (oMove >= 0)
+				trainOneMove('O', grid, oMove);
 		}
 	}
 
@@ -138,13 +148,14 @@ public class NeuralPlayer extends Player {
 		return numFailedMoves;
 	}
 
-	private void trainOneMove(char whichPlayer, char[][] gridBeforeMove, int selectedMove) {
+	private void trainOneMove(char whichPlayer, char[][] gridBeforeMove,
+			int selectedMove) {
 		char opponent = (whichPlayer == 'X') ? 'O' : 'X';
 		for (int r = 0, idx = 0; r < 3; r++) {
 			for (int c = 0; c < 3; c++, idx++) {
 				char ch = gridBeforeMove[r][c];
 				netIns[idx] = (ch == whichPlayer) ? 1.0 : 0.0;
-				netIns[idx+9] = (ch == opponent) ? 1.0 : 0.0;
+				netIns[idx + 9] = (ch == opponent) ? 1.0 : 0.0;
 				netExpectedOuts[idx] = 0.0;
 			}
 		}
@@ -180,23 +191,31 @@ public class NeuralPlayer extends Player {
 				for (int r = 0; r < 3; r++) {
 					for (int c = 0; c < 3; c++) {
 						switch (grid[r][c]) {
-						case 'X': xMoves++; break;
-						case 'O': oMoves++; break;
+						case 'X':
+							xMoves++;
+							break;
+						case 'O':
+							oMoves++;
+							break;
 						}
 					}
 				}
 				if (oMoves > xMoves) {
 					// X's turn.
-					allBoardsXNextMove[i] = idealPlayer.chooseNextMove(grid, 'X');
+					allBoardsXNextMove[i] = idealPlayer.chooseNextMove(grid,
+							'X');
 					allBoardsONextMove[i] = -1;
 				} else if (xMoves > oMoves) {
 					// O's turn.
 					allBoardsXNextMove[i] = -1;
-					allBoardsONextMove[i] = idealPlayer.chooseNextMove(grid, 'O');
+					allBoardsONextMove[i] = idealPlayer.chooseNextMove(grid,
+							'O');
 				} else {
-					// Either player's turn.  Calculate each player's next move.
-					allBoardsXNextMove[i] = idealPlayer.chooseNextMove(grid, 'X');
-					allBoardsONextMove[i] = idealPlayer.chooseNextMove(grid, 'O');
+					// Either player's turn. Calculate each player's next move.
+					allBoardsXNextMove[i] = idealPlayer.chooseNextMove(grid,
+							'X');
+					allBoardsONextMove[i] = idealPlayer.chooseNextMove(grid,
+							'O');
 				}
 			}
 		}

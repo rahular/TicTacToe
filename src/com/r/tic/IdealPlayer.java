@@ -1,3 +1,6 @@
+/**
+ * @author rahul
+ **/
 package com.r.tic;
 
 public class IdealPlayer extends Player {
@@ -5,54 +8,26 @@ public class IdealPlayer extends Player {
 	private int[] forkSetupCount = new int[9];
 	private int forkCount;
 
-	private static final int[][] orders1 = {
-		{ 0 },
-	};
-	private static final int[][] orders2 = {
-		{ 0, 1 },
-		{ 1, 0 },
-	};
-	private static final int[][] orders3 = {
-		{ 0, 1, 2 },
-		{ 0, 2, 1 },
-		{ 1, 0, 2 },
-		{ 1, 2, 0 },
-		{ 2, 0, 1 },
-		{ 2, 1, 0 },
-	};
-	private static final int[][] orders4 = {
-		{ 0, 1, 2, 3 },
-		{ 0, 1, 3, 2 },
-		{ 0, 2, 1, 3 },
-		{ 0, 2, 3, 1 },
-		{ 0, 3, 1, 2 },
-		{ 0, 3, 2, 1 },
-		{ 1, 0, 2, 3 },
-		{ 1, 0, 3, 2 },
-		{ 1, 2, 0, 3 },
-		{ 1, 2, 3, 0 },
-		{ 1, 3, 0, 2 },
-		{ 1, 3, 2, 0 },
-		{ 2, 0, 1, 3 },
-		{ 2, 0, 3, 1 },
-		{ 2, 1, 0, 3 },
-		{ 2, 1, 3, 0 },
-		{ 2, 3, 0, 1 },
-		{ 2, 3, 1, 0 },
-		{ 3, 0, 1, 2 },
-		{ 3, 0, 2, 1 },
-		{ 3, 1, 0, 2 },
-		{ 3, 1, 2, 0 },
-		{ 3, 2, 0, 1 },
-		{ 3, 2, 1, 0 },
-	};
-	private static final int[][][] orders = { null, orders1, orders2, orders3, orders4 };
+	private static final int[][] orders1 = { { 0 }, };
+	private static final int[][] orders2 = { { 0, 1 }, { 1, 0 }, };
+	private static final int[][] orders3 = { { 0, 1, 2 }, { 0, 2, 1 },
+			{ 1, 0, 2 }, { 1, 2, 0 }, { 2, 0, 1 }, { 2, 1, 0 }, };
+	private static final int[][] orders4 = { { 0, 1, 2, 3 }, { 0, 1, 3, 2 },
+			{ 0, 2, 1, 3 }, { 0, 2, 3, 1 }, { 0, 3, 1, 2 }, { 0, 3, 2, 1 },
+			{ 1, 0, 2, 3 }, { 1, 0, 3, 2 }, { 1, 2, 0, 3 }, { 1, 2, 3, 0 },
+			{ 1, 3, 0, 2 }, { 1, 3, 2, 0 }, { 2, 0, 1, 3 }, { 2, 0, 3, 1 },
+			{ 2, 1, 0, 3 }, { 2, 1, 3, 0 }, { 2, 3, 0, 1 }, { 2, 3, 1, 0 },
+			{ 3, 0, 1, 2 }, { 3, 0, 2, 1 }, { 3, 1, 0, 2 }, { 3, 1, 2, 0 },
+			{ 3, 2, 0, 1 }, { 3, 2, 1, 0 }, };
+	private static final int[][][] orders = { null, orders1, orders2, orders3,
+			orders4 };
 
 	public IdealPlayer() {
 		// By default, this player shuffles the free positions.
 		setRandomizeMoves(true);
 	}
 
+	@Override
 	public synchronized int chooseNextMove(char[][] grid, char whichPlayer) {
 		char opponent = (whichPlayer == 'X') ? 'O' : 'X';
 
@@ -80,7 +55,7 @@ public class IdealPlayer extends Player {
 
 		// Take the center if availble.
 		if (grid[1][1] == ' ') {
-			return (1*3)+1;
+			return (1 * 3) + 1;
 		}
 
 		// Take the opposite corner from the opponent, if available.
@@ -106,7 +81,8 @@ public class IdealPlayer extends Player {
 	// Try to set up a win for, or block against, whichPlayer.
 	// Returns index into freeRow[], freeCol[] if successful, or -1 if failure.
 	private int tryWinOrBlock(char whichPlayer) {
-		if (movesSoFar < 3) return -1;
+		if (movesSoFar < 3)
+			return -1;
 		int matchCount, spaceCount, spaceIdx;
 		int ri, r, ci, c, rci, rc;
 		int[] rs, cs, rcs;
@@ -131,7 +107,7 @@ public class IdealPlayer extends Player {
 					spaceIdx = c;
 				}
 			}
-			if ( (matchCount == 2) && (spaceCount == 1) ) {
+			if ((matchCount == 2) && (spaceCount == 1)) {
 				return findFreeCellIdx(r, spaceIdx);
 			}
 		}
@@ -148,14 +124,14 @@ public class IdealPlayer extends Player {
 					spaceIdx = r;
 				}
 			}
-			if ( (matchCount == 2) && (spaceCount == 1) ) {
+			if ((matchCount == 2) && (spaceCount == 1)) {
 				return findFreeCellIdx(spaceIdx, c);
 			}
 		}
-		// If we're randomizing moves, randomize the order in which we do the next two inner loops.
-		for (int pass = 1, step = randomizeMoves ? rand.nextInt(2) : 0;
-			 pass <= 2;
-			 pass++, step = (step != 0) ? 0 : 1) {
+		// If we're randomizing moves, randomize the order in which we do the
+		// next two inner loops.
+		for (int pass = 1, step = randomizeMoves ? rand.nextInt(2) : 0; pass <= 2; pass++, step = (step != 0) ? 0
+				: 1) {
 			matchCount = spaceCount = 0;
 			spaceIdx = -1;
 			if (step == 0) {
@@ -168,21 +144,21 @@ public class IdealPlayer extends Player {
 						spaceIdx = rc;
 					}
 				}
-				if ( (matchCount == 2) && (spaceCount == 1) ) {
+				if ((matchCount == 2) && (spaceCount == 1)) {
 					return findFreeCellIdx(spaceIdx, spaceIdx);
 				}
 			} else {
 				for (rci = 0; rci < 3; rci++) {
 					rc = rcs[rci];
-					if (grid[rc][2-rc] == whichPlayer) {
+					if (grid[rc][2 - rc] == whichPlayer) {
 						matchCount++;
-					} else if (grid[rc][2-rc] == ' ') {
+					} else if (grid[rc][2 - rc] == ' ') {
 						spaceCount++;
 						spaceIdx = rc;
 					}
 				}
-				if ( (matchCount == 2) && (spaceCount == 1) ) {
-					return findFreeCellIdx(spaceIdx, 2-spaceIdx);
+				if ((matchCount == 2) && (spaceCount == 1)) {
+					return findFreeCellIdx(spaceIdx, 2 - spaceIdx);
 				}
 			}
 		}
@@ -192,20 +168,26 @@ public class IdealPlayer extends Player {
 	// Try to set up a two-way (or more) win situation (a fork).
 	// Returns index into freeRow[], freeCol[] if successful, or -1 if failure.
 	private int tryFork(char whichPlayer) {
-		if (movesSoFar < 2) return -1;
+		if (movesSoFar < 2)
+			return -1;
 		findForkCells(whichPlayer);
 		if (forkCount > 0) {
 			// If we only have one possible fork, take it.
-			if (forkCount == 1) return forkFreeIdx[0];
+			if (forkCount == 1)
+				return forkFreeIdx[0];
 			// We have more than one possible fork.
-			// Find out the maximum number of forks we can set up by moving in any position.
+			// Find out the maximum number of forks we can set up by moving in
+			// any position.
 			int maxCount = 0;
 			for (int i = 0; i < forkCount; i++) {
-				if (forkSetupCount[i] > maxCount) maxCount = forkSetupCount[i];
+				if (forkSetupCount[i] > maxCount)
+					maxCount = forkSetupCount[i];
 			}
-			// Pick a position to play which achieves the maximum number of forks.
+			// Pick a position to play which achieves the maximum number of
+			// forks.
 			for (int i = 0; i < forkCount; i++) {
-				if (forkSetupCount[i] == maxCount) return forkFreeIdx[i];
+				if (forkSetupCount[i] == maxCount)
+					return forkFreeIdx[i];
 			}
 		}
 		return -1;
@@ -214,11 +196,13 @@ public class IdealPlayer extends Player {
 	// Try to block opponent's fork by forcing them to block our win.
 	// Returns index into freeRow[], freeCol[] if successful, or -1 if failure.
 	private int tryForkBlock(char whichPlayer) {
-		if (movesSoFar <= 2) return -1;
+		if (movesSoFar <= 2)
+			return -1;
 		char opponent = (whichPlayer == 'X') ? 'O' : 'X';
 
 		findForkCells(opponent);
-		if (forkCount == 0) return -1;
+		if (forkCount == 0)
+			return -1;
 
 		int ri, r, ci, c, rci, rc;
 		int[] rs, cs, rcs;
@@ -235,19 +219,20 @@ public class IdealPlayer extends Player {
 		for (freeIdx = 0; freeIdx < freeCount; freeIdx++) {
 			fr = freeRow[freeIdx];
 			fc = freeCol[freeIdx];
-			if ( (fr == 1) && (fc == 1) ) {
+			if ((fr == 1) && (fc == 1)) {
 				numSteps = 4;
 			} else {
-				numSteps = ( (fr == 0) || (fr == 2) ) && ( (fc == 0) || (fc == 2) ) ? 3 : 2;
+				numSteps = ((fr == 0) || (fr == 2)) && ((fc == 0) || (fc == 2)) ? 3
+						: 2;
 			}
-			int[] steps = randomizeMoves ?
-				orders[numSteps][rand.nextInt(orders[numSteps].length)] :
-				orders[numSteps][0];
+			int[] steps = randomizeMoves ? orders[numSteps][rand
+					.nextInt(orders[numSteps].length)] : orders[numSteps][0];
 			for (si = 0; si < numSteps; si++) {
 				myCount = opponentCount = 0;
-				openr = -1; openc = -1;
+				openr = -1;
+				openc = -1;
 				switch (steps[si]) {
-				case 0:		// Horizontal
+				case 0: // Horizontal
 					r = fr;
 					for (ci = 0; ci < 3; ci++) {
 						c = cs[ci];
@@ -256,13 +241,14 @@ public class IdealPlayer extends Player {
 						} else if (grid[r][c] == opponent) {
 							opponentCount++;
 						} else if (c != fc) {
-							// The row/col that will be left open if we make a move here.
+							// The row/col that will be left open if we make a
+							// move here.
 							openr = r;
 							openc = c;
 						}
 					}
 					break;
-				case 1:		// Vertical
+				case 1: // Vertical
 					c = fc;
 					for (ri = 0; ri < 3; ri++) {
 						r = rs[ri];
@@ -271,13 +257,14 @@ public class IdealPlayer extends Player {
 						} else if (grid[r][c] == opponent) {
 							opponentCount++;
 						} else if (r != fr) {
-							// The row/col that will be left open if we make a move here.
+							// The row/col that will be left open if we make a
+							// move here.
 							openr = r;
 							openc = c;
 						}
 					}
 					break;
-				case 2:		// Diagonal
+				case 2: // Diagonal
 				case 3:
 					if (numSteps == 4) {
 						if (steps[si] == 2) {
@@ -288,7 +275,8 @@ public class IdealPlayer extends Player {
 							cd = -1;
 						}
 					} else {
-						if ( ( (fr == 0) && (fc == 0) ) || ( (fr == 2) && (fc == 2) ) ) {
+						if (((fr == 0) && (fc == 0))
+								|| ((fr == 2) && (fc == 2))) {
 							c = 0;
 							cd = 1;
 						} else {
@@ -296,26 +284,30 @@ public class IdealPlayer extends Player {
 							cd = -1;
 						}
 					}
-/// TODO: If randomizing moves, randomize row/column order. Be careful not to mess up the column delta (cd).
+					// / TODO: If randomizing moves, randomize row/column order.
+					// Be careful not to mess up the column delta (cd).
 					for (r = 0; r < 3; r++, c += cd) {
 						if (grid[r][c] == whichPlayer) {
 							myCount++;
 						} else if (grid[r][c] == opponent) {
 							opponentCount++;
-						} else if ( (r != fr) && (c != fc) ) {
-							// The row/col that will be left open if we make a move here.
+						} else if ((r != fr) && (c != fc)) {
+							// The row/col that will be left open if we make a
+							// move here.
 							openr = r;
 							openc = c;
 						}
 					}
 					break;
-				}	// switch (steps[si])
-				if ( (myCount > 0) && (opponentCount == 0) && (openr >= 0) && (openc >= 0) ) {
-					// Make sure openr,openc aren't in a cell where the opponent would play to fork.
+				} // switch (steps[si])
+				if ((myCount > 0) && (opponentCount == 0) && (openr >= 0)
+						&& (openc >= 0)) {
+					// Make sure openr,openc aren't in a cell where the opponent
+					// would play to fork.
 					found = false;
 					for (forkIdx = 0; forkIdx < forkCount; forkIdx++) {
-						if (   (freeRow[forkFreeIdx[forkIdx]] == openr)
-							&& (freeCol[forkFreeIdx[forkIdx]] == openc)   ) {
+						if ((freeRow[forkFreeIdx[forkIdx]] == openr)
+								&& (freeCol[forkFreeIdx[forkIdx]] == openc)) {
 							found = true;
 							break;
 						}
@@ -324,8 +316,8 @@ public class IdealPlayer extends Player {
 						return freeIdx;
 					}
 				}
-			}	// for (si = 0; si < numSteps; si++)
-		}	// for (freeIdx = 0; freeIdx < freeCount; freeIdx++)
+			} // for (si = 0; si < numSteps; si++)
+		} // for (freeIdx = 0; freeIdx < freeCount; freeIdx++)
 
 		return -1;
 	}
@@ -333,22 +325,28 @@ public class IdealPlayer extends Player {
 	// Take the opposite corner from the opponent, if available.
 	// Returns index into freeRow[], freeCol[] if successful, or -1 if failure.
 	private int tryOppositeCornerFromOpponent(char whichPlayer) {
-		if (movesSoFar < 1) return -1;
+		if (movesSoFar < 1)
+			return -1;
 		char opponent = (whichPlayer == 'X') ? 'O' : 'X';
-		int[] steps = randomizeMoves ? orders4[rand.nextInt(orders4.length)] : orders4[0];
+		int[] steps = randomizeMoves ? orders4[rand.nextInt(orders4.length)]
+				: orders4[0];
 		for (int si = 0; si < 4; si++) {
 			switch (steps[si]) {
 			case 0:
-				if ( (grid[0][0] == opponent) && (grid[2][2] == ' ') ) return findFreeCellIdx(2, 2);
+				if ((grid[0][0] == opponent) && (grid[2][2] == ' '))
+					return findFreeCellIdx(2, 2);
 				break;
 			case 1:
-				if ( (grid[0][2] == opponent) && (grid[2][0] == ' ') ) return findFreeCellIdx(2, 0);
+				if ((grid[0][2] == opponent) && (grid[2][0] == ' '))
+					return findFreeCellIdx(2, 0);
 				break;
 			case 2:
-				if ( (grid[2][2] == opponent) && (grid[0][0] == ' ') ) return findFreeCellIdx(0, 0);
+				if ((grid[2][2] == opponent) && (grid[0][0] == ' '))
+					return findFreeCellIdx(0, 0);
 				break;
 			case 3:
-				if ( (grid[2][0] == opponent) && (grid[0][2] == ' ') ) return findFreeCellIdx(0, 2);
+				if ((grid[2][0] == opponent) && (grid[0][2] == ' '))
+					return findFreeCellIdx(0, 2);
 				break;
 			}
 		}
@@ -358,20 +356,25 @@ public class IdealPlayer extends Player {
 	// Take any available corner.
 	// Returns index into freeRow[], freeCol[] if successful, or -1 if failure.
 	private int tryAnyCorner(char whichPlayer) {
-		int[] steps = randomizeMoves ? orders4[rand.nextInt(orders4.length)] : orders4[0];
+		int[] steps = randomizeMoves ? orders4[rand.nextInt(orders4.length)]
+				: orders4[0];
 		for (int si = 0; si < 4; si++) {
 			switch (steps[si]) {
 			case 0:
-				if (grid[0][0] == ' ') return findFreeCellIdx(0, 0);
+				if (grid[0][0] == ' ')
+					return findFreeCellIdx(0, 0);
 				break;
 			case 1:
-				if (grid[0][2] == ' ') return findFreeCellIdx(0, 2);
+				if (grid[0][2] == ' ')
+					return findFreeCellIdx(0, 2);
 				break;
 			case 2:
-				if (grid[2][0] == ' ') return findFreeCellIdx(2, 0);
+				if (grid[2][0] == ' ')
+					return findFreeCellIdx(2, 0);
 				break;
 			case 3:
-				if (grid[2][2] == ' ') return findFreeCellIdx(2, 2);
+				if (grid[2][2] == ' ')
+					return findFreeCellIdx(2, 2);
 				break;
 			}
 		}
@@ -381,20 +384,25 @@ public class IdealPlayer extends Player {
 	// Take any available side.
 	// Returns index into freeRow[], freeCol[] if successful, or -1 if failure.
 	private int tryAnySide(char whichPlayer) {
-		int[] steps = randomizeMoves ? orders4[rand.nextInt(orders4.length)] : orders4[0];
+		int[] steps = randomizeMoves ? orders4[rand.nextInt(orders4.length)]
+				: orders4[0];
 		for (int si = 0; si < 4; si++) {
 			switch (steps[si]) {
 			case 0:
-				if (grid[0][1] == ' ') return findFreeCellIdx(0, 1);
+				if (grid[0][1] == ' ')
+					return findFreeCellIdx(0, 1);
 				break;
 			case 1:
-				if (grid[1][2] == ' ') return findFreeCellIdx(1, 2);
+				if (grid[1][2] == ' ')
+					return findFreeCellIdx(1, 2);
 				break;
 			case 2:
-				if (grid[2][1] == ' ') return findFreeCellIdx(2, 1);
+				if (grid[2][1] == ' ')
+					return findFreeCellIdx(2, 1);
 				break;
 			case 3:
-				if (grid[1][0] == ' ') return findFreeCellIdx(1, 0);
+				if (grid[1][0] == ' ')
+					return findFreeCellIdx(1, 0);
 				break;
 			}
 		}
@@ -404,20 +412,24 @@ public class IdealPlayer extends Player {
 	// Try to set up a vertical or horizontal win situation.
 	// Returns index into freeRow[], freeCol[] if successful, or -1 if failure.
 	private int tryVertOrHorizWinSetup(char whichPlayer) {
-		if (movesSoFar < 2) return -1;
-		int[] rci = randomizeMoves ? orders3[rand.nextInt(orders3.length)] : orders3[0];
-		for (int pass = 0, whichDir = randomizeMoves ? rand.nextInt(2) : 0;
-			 pass < 2;
-			 pass++, whichDir = (whichDir != 0) ? 0 : whichDir) {
-			boolean takeCenter = randomizeMoves ? (rand.nextInt(2) != 0) : false;
+		if (movesSoFar < 2)
+			return -1;
+		int[] rci = randomizeMoves ? orders3[rand.nextInt(orders3.length)]
+				: orders3[0];
+		for (int pass = 0, whichDir = randomizeMoves ? rand.nextInt(2) : 0; pass < 2; pass++, whichDir = (whichDir != 0) ? 0
+				: whichDir) {
+			boolean takeCenter = randomizeMoves ? (rand.nextInt(2) != 0)
+					: false;
 			if (whichDir == 0) {
 				// Try to set up a horizontal win.
 				if (takeCenter) {
 					for (int ri = 0, r = 0; ri < 3; ri++) {
 						r = rci[ri];
 						if (grid[r][1] == ' ') {
-							if (   (grid[r][0] == whichPlayer) && (grid[r][2] == ' ')
-								|| (grid[r][2] == whichPlayer) && (grid[r][0] == ' ')   ) {
+							if ((grid[r][0] == whichPlayer)
+									&& (grid[r][2] == ' ')
+									|| (grid[r][2] == whichPlayer)
+									&& (grid[r][0] == ' ')) {
 								return findFreeCellIdx(r, 1);
 							}
 						}
@@ -426,18 +438,22 @@ public class IdealPlayer extends Player {
 					for (int ri = 0, r = 0; ri < 3; ri++) {
 						r = rci[ri];
 						if (grid[r][1] == ' ') {
-							if ( (!randomizeMoves) || (rand.nextInt(2) == 0) ) {
-								if ( (grid[r][0] == whichPlayer) && (grid[r][2] == ' ') ) {
+							if ((!randomizeMoves) || (rand.nextInt(2) == 0)) {
+								if ((grid[r][0] == whichPlayer)
+										&& (grid[r][2] == ' ')) {
 									return findFreeCellIdx(r, 2);
 								}
-								if ( (grid[r][2] == whichPlayer) && (grid[r][0] == ' ') ) {
+								if ((grid[r][2] == whichPlayer)
+										&& (grid[r][0] == ' ')) {
 									return findFreeCellIdx(r, 0);
 								}
 							} else {
-								if ( (grid[r][2] == whichPlayer) && (grid[r][0] == ' ') ) {
+								if ((grid[r][2] == whichPlayer)
+										&& (grid[r][0] == ' ')) {
 									return findFreeCellIdx(r, 0);
 								}
-								if ( (grid[r][0] == whichPlayer) && (grid[r][2] == ' ') ) {
+								if ((grid[r][0] == whichPlayer)
+										&& (grid[r][2] == ' ')) {
 									return findFreeCellIdx(r, 2);
 								}
 							}
@@ -450,8 +466,10 @@ public class IdealPlayer extends Player {
 					for (int ci = 0, c = 0; ci < 3; ci++) {
 						c = rci[ci];
 						if (grid[1][c] == ' ') {
-							if (   (grid[0][c] == whichPlayer) && (grid[2][c] == ' ')
-								|| (grid[2][c] == whichPlayer) && (grid[0][c] == ' ')   ) {
+							if ((grid[0][c] == whichPlayer)
+									&& (grid[2][c] == ' ')
+									|| (grid[2][c] == whichPlayer)
+									&& (grid[0][c] == ' ')) {
 								return findFreeCellIdx(1, c);
 							}
 						}
@@ -460,10 +478,12 @@ public class IdealPlayer extends Player {
 					for (int ci = 0, c = 0; ci < 3; ci++) {
 						c = rci[ci];
 						if (grid[1][c] == ' ') {
-							if ( (grid[0][c] == whichPlayer) && (grid[2][c] == ' ') ) {
+							if ((grid[0][c] == whichPlayer)
+									&& (grid[2][c] == ' ')) {
 								return findFreeCellIdx(2, c);
 							}
-							if ( (grid[2][c] == whichPlayer) && (grid[0][c] == ' ') ) {
+							if ((grid[2][c] == whichPlayer)
+									&& (grid[0][c] == ' ')) {
 								return findFreeCellIdx(0, c);
 							}
 						}
@@ -478,28 +498,29 @@ public class IdealPlayer extends Player {
 	// Returns index into freeRow[], freeCol[] if successful, or -1 if failure.
 	private int tryDiagWinSetup(char whichPlayer) {
 		if (grid[1][1] == ' ') {
-			if ( (!randomizeMoves) || (rand.nextInt(2) == 0) ) {
+			if ((!randomizeMoves) || (rand.nextInt(2) == 0)) {
 				// Try to take the opposing corner.
-				int[] steps = randomizeMoves ? orders4[rand.nextInt(orders4.length)] : orders4[0];
+				int[] steps = randomizeMoves ? orders4[rand
+						.nextInt(orders4.length)] : orders4[0];
 				for (int si = 0; si < 4; si++) {
 					switch (steps[si]) {
 					case 0:
-						if ( (grid[0][0] == whichPlayer) && (grid[2][2] == ' ') ) {
+						if ((grid[0][0] == whichPlayer) && (grid[2][2] == ' ')) {
 							return findFreeCellIdx(2, 2);
 						}
 						break;
 					case 1:
-						if ( (grid[2][2] == whichPlayer) && (grid[0][0] == ' ') ) {
+						if ((grid[2][2] == whichPlayer) && (grid[0][0] == ' ')) {
 							return findFreeCellIdx(0, 0);
 						}
 						break;
 					case 2:
-						if ( (grid[0][2] == whichPlayer) && (grid[2][0] == ' ') ) {
+						if ((grid[0][2] == whichPlayer) && (grid[2][0] == ' ')) {
 							return findFreeCellIdx(2, 0);
 						}
 						break;
 					case 3:
-						if ( (grid[2][0] == whichPlayer) && (grid[0][2] == ' ') ) {
+						if ((grid[2][0] == whichPlayer) && (grid[0][2] == ' ')) {
 							return findFreeCellIdx(0, 2);
 						}
 						break;
@@ -507,10 +528,10 @@ public class IdealPlayer extends Player {
 				}
 			} else {
 				// Try to take the center.
-				if (   ( (grid[0][0] == whichPlayer) && (grid[2][2] == ' ') )
-					|| ( (grid[2][2] == whichPlayer) && (grid[0][0] == ' ') )
-					|| ( (grid[0][2] == whichPlayer) && (grid[2][0] == ' ') )
-					|| ( (grid[2][0] == whichPlayer) && (grid[0][2] == ' ') )   ) {
+				if (((grid[0][0] == whichPlayer) && (grid[2][2] == ' '))
+						|| ((grid[2][2] == whichPlayer) && (grid[0][0] == ' '))
+						|| ((grid[0][2] == whichPlayer) && (grid[2][0] == ' '))
+						|| ((grid[2][0] == whichPlayer) && (grid[0][2] == ' '))) {
 					return findFreeCellIdx(1, 1);
 				}
 			}
@@ -534,7 +555,8 @@ public class IdealPlayer extends Player {
 					opponentCount++;
 				}
 			}
-			if ( (myCount > 0) && (opponentCount == 0) ) setupCount++;
+			if ((myCount > 0) && (opponentCount == 0))
+				setupCount++;
 			myCount = opponentCount = 0;
 			for (c = 0; c < 3; c++) {
 				if (grid[fr][c] == whichPlayer) {
@@ -543,8 +565,9 @@ public class IdealPlayer extends Player {
 					opponentCount++;
 				}
 			}
-			if ( (myCount > 0) && (opponentCount == 0) ) setupCount++;
-			if ( ( (fr == 0) || (fr == 2) ) && ( (fc == 0) || (fc == 2) ) ) {
+			if ((myCount > 0) && (opponentCount == 0))
+				setupCount++;
+			if (((fr == 0) || (fr == 2)) && ((fc == 0) || (fc == 2))) {
 				rdir = (fr == 0) ? 1 : -1;
 				cdir = (fc == 0) ? 1 : -1;
 				r = fr;
@@ -557,7 +580,8 @@ public class IdealPlayer extends Player {
 						opponentCount++;
 					}
 				}
-				if ( (myCount > 0) && (opponentCount == 0) ) setupCount++;
+				if ((myCount > 0) && (opponentCount == 0))
+					setupCount++;
 			}
 			if (setupCount >= 2) {
 				forkFreeIdx[forkCount] = freeIdx;

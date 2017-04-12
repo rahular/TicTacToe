@@ -19,27 +19,54 @@ public class AllBoards {
 					.getClassLoader().getResourceAsStream(resourceName)));
 			String line;
 			while (true) {
-				if ((line = in.readLine()) == null)
-					break;
-				if (line.length() == 0)
-					continue;
-				if (line.length() != 9) {
-					throw new Exception("Unexpected line length: "
-							+ line.length() + " (should be 9)");
-				}
+                            try{
+                                    if ((line = in.readLine()) == null)
+                                            break;
+                                    if (line.length() == 0)
+                                            continue;
 
-				char[][] grid = new char[3][3];
-				grid[0][0] = line.charAt(0);
-				grid[0][1] = line.charAt(1);
-				grid[0][2] = line.charAt(2);
-				grid[1][0] = line.charAt(3);
-				grid[1][1] = line.charAt(4);
-				grid[1][2] = line.charAt(5);
-				grid[2][0] = line.charAt(6);
-				grid[2][1] = line.charAt(7);
-				grid[2][2] = line.charAt(8);
+                                    char[][] grid = new char[3][3];
 
-				v.add(grid);
+
+                                    /*
+                                    grid[0][0] = line.charAt(0);
+                                    grid[0][1] = line.charAt(1);
+                                    grid[0][2] = line.charAt(2);
+                                    grid[1][0] = line.charAt(3);
+                                    grid[1][1] = line.charAt(4);
+                                    grid[1][2] = line.charAt(5);
+                                    grid[2][0] = line.charAt(6);
+                                    grid[2][1] = line.charAt(7);
+                                    grid[2][2] = line.charAt(8);
+                                    */
+                                    for(int i = 0; i<9; i++){
+
+
+                                        int firstIndex = i/3;
+                                        int secondIndex = i%3;
+                                        try{
+                                            char readChar = line.charAt(i);
+                                            //check if character is invalid
+                                            if(readChar != 'X'
+                                                && readChar != 'O'
+                                                && readChar != ' '){
+                                                throw new InvalidCharacterException();
+                                            }
+                                            grid[firstIndex][secondIndex] = readChar;
+                                        }catch(IndexOutOfBoundsException e){
+                                            grid[firstIndex][secondIndex] = " ".charAt(0);
+                                        }
+                                    }
+
+                            
+
+
+
+
+                                    v.add(grid);
+                            }catch(InvalidCharacterException e){
+                                //skip line if invalid character found
+                            }
 			}
 			return (char[][][]) v.toArray(new char[v.size()][][]);
 		} catch (Exception ex) {
